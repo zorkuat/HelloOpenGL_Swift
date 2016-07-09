@@ -108,7 +108,7 @@ class OpenGLView: UIView {
     }
     
     func compileShader(shaderName: String, shaderType: GLenum, shader: UnsafeMutablePointer<GLuint>) -> Int {
-        let shaderPath = Bundle.main().pathForResource(shaderName, ofType:"glsl")
+        let shaderPath = Bundle.main.pathForResource(shaderName, ofType:"glsl")
         var error : NSError?
         let shaderString: NSString?
         do {
@@ -139,7 +139,7 @@ class OpenGLView: UIView {
             let infoLog = UnsafeMutablePointer<GLchar>(allocatingCapacity: 256)
             var infoLogLength = GLsizei()
             
-            glGetShaderInfoLog(shader.pointee, GLsizei(sizeof(GLchar) * 256), &infoLogLength, infoLog)
+            glGetShaderInfoLog(shader.pointee, GLsizei(sizeof(GLchar.self) * 256), &infoLogLength, infoLog)
             NSLog("OpenGLView compileShader():  glCompileShader() failed:  %@", String(cString: infoLog))
             
             infoLog.deallocateCapacity(256)
@@ -174,7 +174,7 @@ class OpenGLView: UIView {
             let infoLog = UnsafeMutablePointer<GLchar>(allocatingCapacity: 1024)
             var infoLogLength = GLsizei()
             
-            glGetProgramInfoLog(program, GLsizei(sizeof(GLchar) * 1024), &infoLogLength, infoLog)
+            glGetProgramInfoLog(program, GLsizei(sizeof(GLchar.self) * 1024), &infoLogLength, infoLog)
             NSLog("OpenGLView compileShaders():  glLinkProgram() failed:  %@", String(cString:  infoLog))
             
             infoLog.deallocateCapacity(1024)
@@ -221,14 +221,14 @@ class OpenGLView: UIView {
         
         let positionSlotFirstComponent = UnsafePointer<Int>(bitPattern:0)
         glEnableVertexAttribArray(_positionSlot)
-        glVertexAttribPointer(_positionSlot, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(sizeof(Vertex)), positionSlotFirstComponent)
+        glVertexAttribPointer(_positionSlot, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(sizeof(Vertex.self)), positionSlotFirstComponent)
         
         glEnableVertexAttribArray(_colorSlot)
-        let colorSlotFirstComponent = UnsafePointer<Int>(bitPattern:sizeof(Float) * 3)
-        glVertexAttribPointer(_colorSlot, 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(sizeof(Vertex)), colorSlotFirstComponent)
+        let colorSlotFirstComponent = UnsafePointer<Int>(bitPattern:sizeof(Float.self) * 3)
+        glVertexAttribPointer(_colorSlot, 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(sizeof(Vertex.self)), colorSlotFirstComponent)
         
         let vertexBufferOffset = UnsafeMutablePointer<Void>(bitPattern: 0)
-        glDrawElements(GLenum(GL_TRIANGLES), GLsizei((_indices.count * sizeof(GLubyte))/sizeof(GLubyte)),
+        glDrawElements(GLenum(GL_TRIANGLES), GLsizei((_indices.count * sizeof(GLubyte.self))/sizeof(GLubyte.self)),
                        GLenum(GL_UNSIGNED_BYTE), vertexBufferOffset)
         
         _context!.presentRenderbuffer(Int(GL_RENDERBUFFER))
@@ -259,7 +259,7 @@ class OpenGLView: UIView {
     
     func setupDisplayLink() -> Int {
         let displayLink : CADisplayLink = CADisplayLink(target: self, selector: #selector(OpenGLView.render(displayLink:)))
-        displayLink.add(to: RunLoop.current(), forMode: RunLoopMode.defaultRunLoopMode.rawValue)
+        displayLink.add(to: RunLoop.current, forMode: RunLoopMode(rawValue: RunLoopMode.defaultRunLoopMode.rawValue))
         return 0
     }
     
@@ -306,12 +306,12 @@ class OpenGLView: UIView {
         var vertexBuffer = GLuint()
         glGenBuffers(1, &vertexBuffer)
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-        glBufferData(GLenum(GL_ARRAY_BUFFER), (_vertices.count * sizeof(Vertex)), _vertices, GLenum(GL_STATIC_DRAW))
+        glBufferData(GLenum(GL_ARRAY_BUFFER), (_vertices.count * sizeof(Vertex.self)), _vertices, GLenum(GL_STATIC_DRAW))
         
         var indexBuffer = GLuint()
         glGenBuffers(1, &indexBuffer)
         glBindBuffer(GLenum(GL_ELEMENT_ARRAY_BUFFER), indexBuffer)
-        glBufferData(GLenum(GL_ELEMENT_ARRAY_BUFFER), (_indices.count * sizeof(GLubyte)), _indices, GLenum(GL_STATIC_DRAW))
+        glBufferData(GLenum(GL_ELEMENT_ARRAY_BUFFER), (_indices.count * sizeof(GLubyte.self)), _indices, GLenum(GL_STATIC_DRAW))
         return 0
     }
     
