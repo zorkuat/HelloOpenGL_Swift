@@ -103,12 +103,12 @@ class OpenGLView: UIView {
         fatalError("OpenGLView init(coder:) has not been implemented")
     }
     
-    override class func layerClass() -> AnyClass {
+    override class var layerClass: AnyClass {
         return CAEAGLLayer.self
     }
     
     func compileShader(shaderName: String, shaderType: GLenum, shader: UnsafeMutablePointer<GLuint>) -> Int {
-        let shaderPath = Bundle.main.pathForResource(shaderName, ofType:"glsl")
+        let shaderPath = Bundle.main.path(forResource: shaderName, ofType:"glsl")
         var error : NSError?
         let shaderString: NSString?
         do {
@@ -136,13 +136,13 @@ class OpenGLView: UIView {
         glGetShaderiv(shader.pointee, GLenum(GL_COMPILE_STATUS), &success)
         
         if (success == GL_FALSE) {
-            let infoLog = UnsafeMutablePointer<GLchar>(allocatingCapacity: 256)
+            let infoLog = UnsafeMutablePointer<GLchar>.allocate(capacity: 256)
             var infoLogLength = GLsizei()
             
             glGetShaderInfoLog(shader.pointee, GLsizei(sizeof(GLchar.self) * 256), &infoLogLength, infoLog)
             NSLog("OpenGLView compileShader():  glCompileShader() failed:  %@", String(cString: infoLog))
             
-            infoLog.deallocateCapacity(256)
+            infoLog.deallocate(capacity: 256)
             return -1
         }
         
@@ -150,13 +150,13 @@ class OpenGLView: UIView {
     }
     
     func compileShaders() -> Int {
-        let vertexShader = UnsafeMutablePointer<GLuint>(allocatingCapacity: 1)
+        let vertexShader = UnsafeMutablePointer<GLuint>.allocate(capacity: 1)
         if (self.compileShader(shaderName: "SimpleVertex", shaderType: GLenum(GL_VERTEX_SHADER), shader: vertexShader) != 0 ) {
             NSLog("OpenGLView compileShaders():  compileShader() failed")
             return -1
         }
         
-        let fragmentShader = UnsafeMutablePointer<GLuint>(allocatingCapacity: 1)
+        let fragmentShader = UnsafeMutablePointer<GLuint>.allocate(capacity: 1)
         if (self.compileShader(shaderName: "SimpleFragment", shaderType: GLenum(GL_FRAGMENT_SHADER), shader: fragmentShader) != 0) {
             NSLog("OpenGLView compileShaders():  compileShader() failed")
             return -1
@@ -171,15 +171,15 @@ class OpenGLView: UIView {
         
         glGetProgramiv(program, GLenum(GL_LINK_STATUS), &success)
         if (success == GL_FALSE) {
-            let infoLog = UnsafeMutablePointer<GLchar>(allocatingCapacity: 1024)
+            let infoLog = UnsafeMutablePointer<GLchar>.allocate(capacity: 1024)
             var infoLogLength = GLsizei()
             
             glGetProgramInfoLog(program, GLsizei(sizeof(GLchar.self) * 1024), &infoLogLength, infoLog)
             NSLog("OpenGLView compileShaders():  glLinkProgram() failed:  %@", String(cString:  infoLog))
             
-            infoLog.deallocateCapacity(1024)
-            fragmentShader.deallocateCapacity(1)
-            vertexShader.deallocateCapacity(1)
+            infoLog.deallocate(capacity: 1024)
+            fragmentShader.deallocate(capacity: 1)
+            vertexShader.deallocate(capacity: 1)
             
             return -1
         }
@@ -194,8 +194,8 @@ class OpenGLView: UIView {
         _projectionUniform = GLuint(glGetUniformLocation(program, "Projection"))
         _modelViewUniform = GLuint(glGetUniformLocation(program, "Modelview"))
         
-        fragmentShader.deallocateCapacity(1)
-        vertexShader.deallocateCapacity(1)
+        fragmentShader.deallocate(capacity: 1)
+        vertexShader.deallocate(capacity: 1)
         return 0
     }
     
