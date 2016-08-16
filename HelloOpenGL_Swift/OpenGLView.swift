@@ -104,7 +104,9 @@ class OpenGLView: UIView {
     }
     
     override class var layerClass: AnyClass {
-        return CAEAGLLayer.self
+        get {
+            return CAEAGLLayer.self
+        }
     }
     
     func compileShader(shaderName: String, shaderType: GLenum, shader: UnsafeMutablePointer<GLuint>) -> Int {
