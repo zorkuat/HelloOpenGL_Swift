@@ -141,7 +141,7 @@ class OpenGLView: UIView {
             let infoLog = UnsafeMutablePointer<GLchar>.allocate(capacity: 256)
             var infoLogLength = GLsizei()
             
-            glGetShaderInfoLog(shader.pointee, GLsizei(sizeof(GLchar.self) * 256), &infoLogLength, infoLog)
+            glGetShaderInfoLog(shader.pointee, GLsizei(MemoryLayout<GLchar>.size * 256), &infoLogLength, infoLog)
             NSLog("OpenGLView compileShader():  glCompileShader() failed:  %@", String(cString: infoLog))
             
             infoLog.deallocate(capacity: 256)
@@ -176,7 +176,7 @@ class OpenGLView: UIView {
             let infoLog = UnsafeMutablePointer<GLchar>.allocate(capacity: 1024)
             var infoLogLength = GLsizei()
             
-            glGetProgramInfoLog(program, GLsizei(sizeof(GLchar.self) * 1024), &infoLogLength, infoLog)
+            glGetProgramInfoLog(program, GLsizei(MemoryLayout<GLchar>.size * 1024), &infoLogLength, infoLog)
             NSLog("OpenGLView compileShaders():  glLinkProgram() failed:  %@", String(cString:  infoLog))
             
             infoLog.deallocate(capacity: 1024)
@@ -208,29 +208,29 @@ class OpenGLView: UIView {
         
         let projection = CC3GLMatrix.matrix()
         let h : CGFloat = 4.0 * self.frame.size.height / self.frame.size.width
-        projection!.populate(fromFrustumLeft: GLfloat(-2), andRight: GLfloat(2), andBottom: GLfloat(-h/2), andTop: GLfloat(h/2), andNear: GLfloat(4), andFar: GLfloat(10))
+        (projection! as AnyObject).populate(fromFrustumLeft: GLfloat(-2), andRight: GLfloat(2), andBottom: GLfloat(-h/2), andTop: GLfloat(h/2), andNear: GLfloat(4), andFar: GLfloat(10))
         
-        glUniformMatrix4fv(GLint(_projectionUniform), 1, 0, projection!.glMatrix)
+        glUniformMatrix4fv(GLint(_projectionUniform), 1, 0, (projection! as AnyObject).glMatrix)
         
         let modelView = CC3GLMatrix.matrix()
-        modelView!.populate(fromTranslation: CC3VectorMake(GLfloat(sin(CACurrentMediaTime())), GLfloat(0), GLfloat(-7)))
+        (modelView! as AnyObject).populate(fromTranslation: CC3VectorMake(GLfloat(sin(CACurrentMediaTime())), GLfloat(0), GLfloat(-7)))
         
         _currentRotation += Float(displayLink.duration) * Float(90)
-        modelView!.rotate(by: CC3VectorMake(_currentRotation, _currentRotation, 0))
+        (modelView! as AnyObject).rotate(by: CC3VectorMake(_currentRotation, _currentRotation, 0))
         
-        glUniformMatrix4fv(GLint(_modelViewUniform), 1, 0, modelView!.glMatrix)
+        glUniformMatrix4fv(GLint(_modelViewUniform), 1, 0, (modelView! as AnyObject).glMatrix)
         glViewport(0, 0, GLsizei(self.frame.size.width), GLsizei(self.frame.size.height));
         
         let positionSlotFirstComponent = UnsafePointer<Int>(bitPattern:0)
         glEnableVertexAttribArray(_positionSlot)
-        glVertexAttribPointer(_positionSlot, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(sizeof(Vertex.self)), positionSlotFirstComponent)
+        glVertexAttribPointer(_positionSlot, 3, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(MemoryLayout<Vertex>.size), positionSlotFirstComponent)
         
         glEnableVertexAttribArray(_colorSlot)
-        let colorSlotFirstComponent = UnsafePointer<Int>(bitPattern:sizeof(Float.self) * 3)
-        glVertexAttribPointer(_colorSlot, 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(sizeof(Vertex.self)), colorSlotFirstComponent)
+        let colorSlotFirstComponent = UnsafePointer<Int>(bitPattern:MemoryLayout<Float>.size * 3)
+        glVertexAttribPointer(_colorSlot, 4, GLenum(GL_FLOAT), GLboolean(GL_FALSE), GLsizei(MemoryLayout<Vertex>.size), colorSlotFirstComponent)
         
-        let vertexBufferOffset = UnsafeMutablePointer<Void>(bitPattern: 0)
-        glDrawElements(GLenum(GL_TRIANGLES), GLsizei((_indices.count * sizeof(GLubyte.self))/sizeof(GLubyte.self)),
+        let vertexBufferOffset = UnsafeMutableRawPointer(bitPattern: 0)
+        glDrawElements(GLenum(GL_TRIANGLES), GLsizei((_indices.count * MemoryLayout<GLubyte>.size)/MemoryLayout<GLubyte>.size),
                        GLenum(GL_UNSIGNED_BYTE), vertexBufferOffset)
         
         _context!.presentRenderbuffer(Int(GL_RENDERBUFFER))
@@ -308,12 +308,12 @@ class OpenGLView: UIView {
         var vertexBuffer = GLuint()
         glGenBuffers(1, &vertexBuffer)
         glBindBuffer(GLenum(GL_ARRAY_BUFFER), vertexBuffer)
-        glBufferData(GLenum(GL_ARRAY_BUFFER), (_vertices.count * sizeof(Vertex.self)), _vertices, GLenum(GL_STATIC_DRAW))
+        glBufferData(GLenum(GL_ARRAY_BUFFER), (_vertices.count * MemoryLayout<Vertex>.size), _vertices, GLenum(GL_STATIC_DRAW))
         
         var indexBuffer = GLuint()
         glGenBuffers(1, &indexBuffer)
         glBindBuffer(GLenum(GL_ELEMENT_ARRAY_BUFFER), indexBuffer)
-        glBufferData(GLenum(GL_ELEMENT_ARRAY_BUFFER), (_indices.count * sizeof(GLubyte.self)), _indices, GLenum(GL_STATIC_DRAW))
+        glBufferData(GLenum(GL_ELEMENT_ARRAY_BUFFER), (_indices.count * MemoryLayout<GLubyte>.size), _indices, GLenum(GL_STATIC_DRAW))
         return 0
     }
     
