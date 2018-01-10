@@ -13,6 +13,8 @@
 //  Use this file to import your target's public headers that you would like to expose to Swift.
 //
 
+// CABECERA DE AUTOIMPORTACIÓN. Fichero para importación de material común. Entre otras las librerías
+// matemáticas CC3GLMatrix.h
 #ifndef HelloOpenGL4_HelloOpenGL4_Bridging_Header_h
 
 #import <UIKit/UIKit.h>

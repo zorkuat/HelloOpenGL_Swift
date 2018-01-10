@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09AF3B0020067BC900C89038 /* UI.png in Resources */ = {isa = PBXBuildFile; fileRef = 09AF3AFF20067BC800C89038 /* UI.png */; };
 		21D0C39D1B8CDE4000E51C72 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D0C39C1B8CDE4000E51C72 /* AppDelegate.swift */; };
 		21D0C39F1B8CDE4000E51C72 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21D0C39E1B8CDE4000E51C72 /* ViewController.swift */; };
 		21D0C3A21B8CDE4000E51C72 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 21D0C3A01B8CDE4000E51C72 /* Main.storyboard */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		09AF3AFF20067BC800C89038 /* UI.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UI.png; path = ../../UI.png; sourceTree = "<group>"; };
 		21D0C3991B8CDE4000E51C72 /* HelloOpenGL_Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloOpenGL_Swift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		21D0C39C1B8CDE4000E51C72 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		21D0C39E1B8CDE4000E51C72 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 		21D0C39B1B8CDE4000E51C72 /* HelloOpenGL_Swift */ = {
 			isa = PBXGroup;
 			children = (
+				09AF3AFF20067BC800C89038 /* UI.png */,
 				21D0C3D01B8CDEA300E51C72 /* HelloOpenGL_Swift-Bridging-Header.h */,
 				21D0C39C1B8CDE4000E51C72 /* AppDelegate.swift */,
 				21D0C39E1B8CDE4000E51C72 /* ViewController.swift */,
@@ -244,7 +247,6 @@
 				TargetAttributes = {
 					21D0C3981B8CDE4000E51C72 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = 349S678FLL;
 						DevelopmentTeamName = "David Rouck";
 					};
 					21D0C3AC1B8CDE4000E51C72 = {
@@ -283,6 +285,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21D0C3A71B8CDE4000E51C72 /* LaunchScreen.storyboard in Resources */,
+				09AF3B0020067BC900C89038 /* UI.png in Resources */,
 				21D0C3CE1B8CDE9100E51C72 /* SimpleVertex.glsl in Resources */,
 				21D0C3A41B8CDE4000E51C72 /* Assets.xcassets in Resources */,
 				21D0C3A21B8CDE4000E51C72 /* Main.storyboard in Resources */,
@@ -462,6 +465,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = HelloOpenGL_Swift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -478,6 +482,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = HelloOpenGL_Swift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

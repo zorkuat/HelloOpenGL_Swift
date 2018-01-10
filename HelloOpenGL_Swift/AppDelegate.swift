@@ -13,6 +13,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
+    // Función de aplicación
+    // ENTRADAS: UIApplication. Interfaz completa. Función de opciones de carga de carga de aplicación (OPCIONAL) Devuelve BOOL.
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         // Override point for customization after application launch.
         return true
