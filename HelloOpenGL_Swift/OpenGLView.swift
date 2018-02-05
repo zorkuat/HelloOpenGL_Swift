@@ -20,6 +20,9 @@ struct Vertex {
     var Color: (Float, Float, Float, Float)
 }
 
+let X = Float(0.525731112119133606)
+let Z = Float(0.850650808352039932)
+
 class OpenGLView: UIView {
     var _context: EAGLContext?
     var _colorRenderBuffer = GLuint()
@@ -32,36 +35,44 @@ class OpenGLView: UIView {
     var _projectionUniform = GLuint()
     
     var _vertices = [
-        Vertex(Position: ( 1, -1,  0), Color: (1, 0, 0, 1)),
-        Vertex(Position: ( 1,  1,  0), Color: (1, 0, 0, 1)),
-        Vertex(Position: (-1,  1,  0), Color: (0, 1, 0, 1)),
-        Vertex(Position: (-1, -1,  0), Color: (0, 1, 0, 1)),
-        Vertex(Position: ( 1, -1, -1), Color: (1, 0, 0, 1)),
-        Vertex(Position: ( 1,  1, -1), Color: (1, 0, 0, 1)),
-        Vertex(Position: (-1,  1, -1), Color: (0, 1, 0, 1)),
-        Vertex(Position: (-1, -1, -1), Color: (0, 1, 0, 1))
+        Vertex(Position: ( -X, 0.0, Z), Color: (1, 0, 0, 1)),
+        Vertex(Position: ( X, 0.0, Z), Color: (1, 0, 0, 1)),
+        Vertex(Position: (-X, 0.0, -Z), Color: (0, 1, 0, 1)),
+        Vertex(Position: (X, 0.0, -Z), Color: (0, 1, 0, 1)),
+        Vertex(Position: ( 0.0, Z, X), Color: (1, 0, 0, 1)),
+        Vertex(Position: ( 0.0, Z, -X), Color: (1, 0, 0, 1)),
+        Vertex(Position: (0.0, -Z, X), Color: (0, 1, 0, 1)),
+        Vertex(Position: (0.0, -Z, -X), Color: (0, 1, 0, 1)),
+        Vertex(Position: (Z, X, 0.0), Color: (0, 1, 0, 1)),
+        Vertex(Position: (-Z, X, 0.0), Color: (0, 1, 0, 1)),
+        Vertex(Position: (Z, -X, 0.0), Color: (0, 1, 0, 1)),
+        Vertex(Position: (-Z, -X, 0.0), Color: (0, 1, 0, 1))
+        
     ]
-    
+
     var _indices : [GLubyte] = [
-        // Front
-        0, 1, 2,
-        2, 3, 0,
-        // Back
-        4, 6, 5,
-        4, 7, 6,
-        // Left
-        2, 7, 3,
-        7, 6, 2,
-        // Right
-        0, 4, 1,
-        4, 1, 5,
-        // Top
-        6, 2, 1,
-        1, 6, 5,
-        // Bottom
-        0, 3, 7,
-        0, 7, 4
+    0,4,1,
+    0,9,4,
+    9,5,4,
+    4,5,8,
+    4,8,1,
+    8,10,1,
+    8,3,10,
+    5,3,8,
+    5,2,3,
+    2,7,3,
+    7,10,3,
+    7,6,10,
+    7,11,6,
+    11,0,6,
+    0,1,6,
+    6,1,10,
+    9,0,11,
+    9,11,2,
+    9,2,5,
+    7,2,11
     ]
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -202,8 +213,11 @@ class OpenGLView: UIView {
     }
     
     func render(displayLink: CADisplayLink) -> Int {
-        glClearColor(0, 104.0/255.0, 55.0/255.0, 1.0)
+        
+        // FONDO
+        glClearColor(0, 104.0/255.0, 55.0/255.0, 0.0)
         glClear(GLbitfield(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT))
+        glBlendFunc(GLenum(GL_SRC_ALPHA), GLenum(GL_ONE_MINUS_SRC_ALPHA))
         glEnable(GLenum(GL_DEPTH_TEST))
         
         let projection = CC3GLMatrix.matrix()
@@ -213,10 +227,12 @@ class OpenGLView: UIView {
         glUniformMatrix4fv(GLint(_projectionUniform), 1, 0, (projection! as AnyObject).glMatrix)
         
         let modelView = CC3GLMatrix.matrix()
-        (modelView! as AnyObject).populate(fromTranslation: CC3VectorMake(GLfloat(sin(CACurrentMediaTime())), GLfloat(0), GLfloat(-7)))
+        (modelView! as AnyObject).populate(fromTranslation: CC3VectorMake(GLfloat(0), GLfloat(0), GLfloat(-7)))
         
-        _currentRotation += Float(displayLink.duration) * Float(90)
-        (modelView! as AnyObject).rotate(by: CC3VectorMake(_currentRotation, _currentRotation, 0))
+        // CC3VectorMake(GLfloat(sin(CACurrentMediaTime())), GLfloat(0), GLfloat(-7))
+        
+        //_currentRotation += Float(displayLink.duration) * Float(90)
+        //(modelView! as AnyObject).rotate(by: CC3VectorMake(_currentRotation, _currentRotation, 0))
         
         glUniformMatrix4fv(GLint(_modelViewUniform), 1, 0, (modelView! as AnyObject).glMatrix)
         glViewport(0, 0, GLsizei(self.frame.size.width), GLsizei(self.frame.size.height));
